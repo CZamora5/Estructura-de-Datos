@@ -24,3 +24,22 @@ class Runner {
         }
     }
 }
+
+const runnerA = new Runner();
+const runnerB = new Runner();
+const distance = 100;
+
+while(runnerA.getPosition() < distance && runnerB.getPosition() < distance) {
+    runnerA.move();   
+    runnerB.move();
+
+    console.log(`Posición del primer corredor: ${runnerA.getPosition()}, posición del segundo corredor: ${runnerB.getPosition()}`);
+}
+
+if (runnerA.getPosition() >= distance && runnerB.getPosition() >= distance) {
+    console.log('Hubo un empate');
+} else if (runnerA.getPosition() >= distance) {
+    console.log('El primer corredor ganó');
+} else {
+    console.log('El segundo corredor ganó');
+}
