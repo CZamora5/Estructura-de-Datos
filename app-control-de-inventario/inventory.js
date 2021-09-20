@@ -24,7 +24,7 @@ export default class Inventory {
 	/* Public Methods */
 	addProduct(product) {
 		if (this.findPosition(product) >= 0) return false;
-		this._products.push(product);
+		this._products[this._size] = product;
 		this._size++;
 		return true;
 	}
@@ -32,14 +32,9 @@ export default class Inventory {
 	insertAt(product, index) {
 		if (0 > index || index >= this._size) return false;
 
-		let previous = product; 
-		for (let i = index; i <= this._size; i--) {
-			let auxiliar = this._products[i];
-			this._products[i] = previous;
-			previous = auxiliar;
-		}
-		this._products.push(previous);
-		return true;
+		let auxiliar = this._products[index];
+		this._products[index] = product;
+		return auxiliar;
 	}
 
 	removeAt(index) {

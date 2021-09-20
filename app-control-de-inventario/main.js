@@ -13,7 +13,7 @@ class App {
         this._btnSearch = document.getElementById('btnSearch');
         this._btnList = document.getElementById('btnList');
         this._btnInverse = document.getElementById('btnInverse');
-        this._btnInsert = document.getElementById('btnInverse');
+        this._btnInsert = document.getElementById('btnInsert');
 
         this._btnAdd.addEventListener('click', this.addProduct);
         this._btnReset.addEventListener('click', this.reset);
@@ -24,7 +24,7 @@ class App {
         this._btnInsert.addEventListener('click', this.insertProduct);
     }
 
-    addProduct = () => {
+    readForm() {
         const FIELDS = ['id', 'name', 'quantity', 'cost'];
         let input = FIELDS.map(field => document.getElementById(field));
         let values = input.map(elem => elem.value);
@@ -34,11 +34,16 @@ class App {
 
         if (!(id && name && quantity && cost)) {
             Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return;
+            return false;
         }
         
+        return new Product(parseInt(id), name, parseFloat(quantity), parseFloat(cost));
+    }
+
+    addProduct = () => {
+        let product = this.readForm();
+        if (product == false) return;
         document.querySelector('form').reset();
-        let product = new Product(parseInt(id), name, parseFloat(quantity), parseFloat(cost));
 
         // Primero verificamos que el inventario tenga espacio
         if (this._inventory.getLength() >= this._capacity) {
@@ -58,6 +63,7 @@ class App {
                                         <strong>Se ha agregado un nuevo producto</strong><br>
                                         ${this._infoHTML(product)}
                                     `;
+        this._updateCounter();
     }
 
     reset = () => {
@@ -65,7 +71,14 @@ class App {
     }
 
     deleteProduct = () => {
-        let id = parseInt(document.getElementById('id').value);
+        let id = document.getElementById('id').value;
+        if (!id) {
+            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
+            return;
+        }
+
+        id = parseInt(id);
+        document.querySelector('form').reset();
 
         let product = this._inventory.getProductById(id);
         if (product == null) {
@@ -83,10 +96,32 @@ class App {
                                         <strong>Se ha eliminado el producto</strong><br>
                                         ${this._infoHTML(product)}
                                     `;
+        this._updateCounter();
     }
 
     searchProduct = () => {
-        
+        let id = document.getElementById('id').value;
+        if (!id) {
+            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
+            return;
+        }
+
+        id = parseInt(id);
+        document.querySelector('form').reset();
+
+        let product = this._inventory.getProductById(id);
+        if (product == null) {
+            this._paragraph.innerHTML = `
+                                            <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
+                                        `;
+            return null;
+        }
+
+        this._paragraph.innerHTML = `
+                                        <strong>El producto con id ${id} es</strong><br>
+                                        ${this._infoHTML(product)}
+                                    `;
+        return product;
     }
 
     listProducts = () => {
@@ -111,7 +146,23 @@ class App {
     }
 
     insertProduct = () => {
-        
+        let product = this.readForm();
+        let index = document.getElementById('insertAt').value;
+        if (!(product && index)) {
+            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
+            return;
+        }
+
+        index = parseInt(index);
+        document.querySelector('form').reset();
+
+        let previous = this._inventory.insertAt(product, index - 1);
+        this._paragraph.innerHTML = `
+                                        <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
+                                        ${this._infoHTML(product)}<br><br>
+                                        <strong>Se eliminó el siguiente producto</strong><br>
+                                        ${this._infoHTML(previous)}
+                                    `;
     }
 
     /* Private Methods */
@@ -122,7 +173,11 @@ class App {
                     Valor en inventario: ${product.getTotalCost()}<br>
               `;
     }
+
+    _updateCounter() {
+        document.getElementById('counter').innerHTML = this._inventory.getLength();
+    }
 }
 
 // Creamos una instancia para habilitar los event listeners
-new App(20);
+new App(4);

@@ -13,7 +13,8 @@
 		<li>Para agregar un producto debes insertar ID, nombre, cantidad, y costo.</li>
 		<li>Para eliminar o buscar un producto únicamente debes insertar ID del producto.</li>
 		<li>Listar ya sea en orden o en reversa no requiere ningún input.</li>
-		<li>Para insertar en una posición dada debes llenar todos los campos y colocar una posición válida.</li>
+		<li>Para insertar en una posición dada debes llenar todos los campos y colocar una posición válida 
+			(comenzando en 1 hasta la cantidad de elementos en el inventario).</li>
 	</ul>
 	<div>
 		<form>
@@ -44,6 +45,7 @@
 		<button type='button' id='btnInverse'>Listar en reversa</button>
 		<button type='button' id='btnInsert'>Insertar un producto en una posición</button>
 	<div>
+	<p>Número de productos en inventario:<span id='counter'>0</span></p>
 	<hr>
 	<p id='paragraph'></p>
 	<!--
