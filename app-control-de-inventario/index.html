@@ -7,6 +7,47 @@
     <title>App para control de un inventario</title>
 </head>
 <body>
+	<div>
+		<form>
+			<label for='id'>ID del producto:
+				<input type='text' id='id'>
+			</label><br>
+			<label for='name'>Nombre del producto:
+				<input type='text' id='name'>
+			</label><br>
+			<label for='quantity'>Cantidad:
+				<input type='text' id='quantity'>
+			</label><br>
+			<label for='cost'>Costo:
+				<input type='text' id='cost'>
+			</label><br>
+			<label for='insert'>Insertar en posición:
+				<input type='number' id='insert'>
+			</label><br>
+			<button type='button' id='btnAdd'>Agregar</button>
+			<button type='reset'>Cancelar</button>
+		</form>
+	</div>
 
+	<div id='actions'>
+		<button type='button' id='btnDelete'>Eliminar mediante ID</button>
+		<button type='button' id='btnSearch'>Buscar mediante ID</button>
+		<button type='button' id='btnList'>Listar</button>
+		<button type='button' id='btnInverseList'>Listar en reversa</button>
+		<button type='button' id='btnInsert'>Agregar un producto en una posición</button>
+	<div>
+
+	<!--
+	Botones :
+	Agregar nuevo producto
+	Eliminar un producto por código, deberá devolver el producto (si existe) o null
+	Buscar un producto por código
+	Recuperar todos los productos //listar
+	Recuperar todos los productos en orden inverso a como se ingresaron//listar inverso
+	Insertar un producto nuevo en una posición 
+	(la posición también se pide en un input), solo puede insertarlo si la posición existe, es decir si tengo 5 productos, no puedo insertarlo de la posición 7 en adelante.
+	-->
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="main.js" type="module"></script>
 </body>
 </html>
