@@ -7,6 +7,14 @@
     <title>App para control de un inventario</title>
 </head>
 <body>
+	<h1>Inventario</h1>
+	<h3>Instrucciones</h3>
+	<ul>
+		<li>Para agregar un producto debes insertar ID, nombre, cantidad, y costo.</li>
+		<li>Para eliminar o buscar un producto únicamente debes insertar ID del producto.</li>
+		<li>Listar ya sea en orden o en reversa no requiere ningún input.</li>
+		<li>Para insertar en una posición dada debes llenar todos los campos y colocar una posición válida.</li>
+	</ul>
 	<div>
 		<form>
 			<label for='id'>ID del producto:
@@ -16,10 +24,10 @@
 				<input type='text' id='name'>
 			</label><br>
 			<label for='quantity'>Cantidad:
-				<input type='text' id='quantity'>
+				<input type='number' id='quantity'>
 			</label><br>
 			<label for='cost'>Costo:
-				<input type='text' id='cost'>
+				<input type='number' id='cost'>
 			</label><br>
 			<label for='insert'>Insertar en posición:
 				<input type='number' id='insert'>
@@ -34,7 +42,7 @@
 		<button type='button' id='btnSearch'>Buscar mediante ID</button>
 		<button type='button' id='btnList'>Listar</button>
 		<button type='button' id='btnInverseList'>Listar en reversa</button>
-		<button type='button' id='btnInsert'>Agregar un producto en una posición</button>
+		<button type='button' id='btnInsert'>Insertar un producto en una posición</button>
 	<div>
 
 	<!--
