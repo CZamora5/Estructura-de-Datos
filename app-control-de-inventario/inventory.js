@@ -22,8 +22,7 @@ export default class Inventory {
 
 	/* Public Methods */
 	addProduct(product) {
-		if (this._findPosition(product) >= 0) return 'ya existe';
-		if (this._products.length >= 20) return 'lleno';
+		if (this._findPosition(product) >= 0) return false;
 		this._products.push(product);
 		return true;
 	}
