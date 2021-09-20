@@ -156,7 +156,16 @@ class App {
         index = parseInt(index);
         document.querySelector('form').reset();
 
+        if (this._inventory.getProductById(product.getId()) != null) {
+            Swal.fire('Error', 'Este id ya se encuentra en el inventario', 'error');
+            return;
+        }
+
         let previous = this._inventory.insertAt(product, index - 1);
+        if (previous == false) {
+            Swal.fire('Error', 'Se ingreso una posición no válida, consulta las instrucciones', 'error');
+            return;
+        }
         this._paragraph.innerHTML = `
                                         <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
                                         ${this._infoHTML(product)}<br><br>
@@ -180,4 +189,4 @@ class App {
 }
 
 // Creamos una instancia para habilitar los event listeners
-new App(4);
+new App(20);
