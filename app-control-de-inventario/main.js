@@ -17,6 +17,11 @@ class App {
 
         this._btnAdd.addEventListener('click', this.addProduct);
         this._btnReset.addEventListener('click', this.reset);
+        this._btnDelete.addEventListener('click', this.deleteProduct);
+        this._btnSearch.addEventListener('click', this.searchProduct);
+        this._btnList.addEventListener('click', this.listProducts);
+        this._btnInverse.addEventListener('click', this.inverseListProducts);
+        this._btnInsert.addEventListener('click', this.insertProduct);
     }
 
     addProduct = () => {
@@ -59,6 +64,56 @@ class App {
         document.querySelector('form').reset();
     }
 
+    deleteProduct = () => {
+        let id = parseInt(document.getElementById('id').value);
+
+        let product = this._inventory.getProductById(id);
+        if (product == null) {
+            this._paragraph.innerHTML = `
+                                            <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
+                                        `;
+            return;
+        }
+
+        // Una vez que compruebo que el producto fue encontrado por Id, se que tiene una posición válida
+        // de hecho ya tengo el producto guardado en la variable producto
+        let position = this._inventory.findPosition(product);
+        this._inventory.removeAt(position);
+        this._paragraph.innerHTML = `
+                                        <strong>Se ha eliminado el producto</strong><br>
+                                        ${this._infoHTML(product)}
+                                    `;
+    }
+
+    searchProduct = () => {
+        
+    }
+
+    listProducts = () => {
+        this._paragraph.innerHTML = '';
+        for (let i = 0; i < this._inventory.getLength(); i++) {
+            this._paragraph.innerHTML += `
+                                            <strong>Producto #${i + 1}</strong><br>
+                                            ${this._infoHTML(this._inventory.getProducts()[i])}<br>
+                                        `;
+        }
+    }
+
+    inverseListProducts = () => {
+        this._paragraph.innerHTML = '';
+        const products = this._inventory.getProducts();
+        for (let i = 0; i < this._inventory.getLength(); i++) {
+            this._paragraph.innerHTML += `
+                                            <strong>Producto #${i + 1}</strong><br>
+                                            ${this._infoHTML(products[this._inventory.getLength() - 1 - i])}<br>
+                                        `;
+        }
+    }
+
+    insertProduct = () => {
+        
+    }
+
     /* Private Methods */
     _infoHTML(product) {
         return `
@@ -66,8 +121,8 @@ class App {
                     Nombre de producto: ${product.getName()}<br>
                     Valor en inventario: ${product.getTotalCost()}<br>
               `;
-      }
+    }
 }
 
 // Creamos una instancia para habilitar los event listeners
-new App(2);
+new App(20);

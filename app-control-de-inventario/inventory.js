@@ -1,19 +1,20 @@
 export default class Inventory {
 	constructor() {
 		this._products = [];
+		this._size = 0;
 	}
 
 	/* Getter Methods */
 	getProductById(id) {
-		for (let product of this._products.length) {
-			if (product.getId() == id) return product;
+		for (let i = 0; i < this._size; i++) {
+			if (this._products[i].getId() == id) return this._products[i];
 		}
 
 		return null;
 	}
 
 	getLength() {
-		return this._products.length;
+		return this._size;
 	}
 
 	getProducts() {
@@ -22,16 +23,17 @@ export default class Inventory {
 
 	/* Public Methods */
 	addProduct(product) {
-		if (this._findPosition(product) >= 0) return false;
+		if (this.findPosition(product) >= 0) return false;
 		this._products.push(product);
+		this._size++;
 		return true;
 	}
 
 	insertAt(product, index) {
-		if (0 > index || index >= this._products.length) return false;
+		if (0 > index || index >= this._size) return false;
 
 		let previous = product; 
-		for (let i = index; i <= this._products.length; i--) {
+		for (let i = index; i <= this._size; i--) {
 			let auxiliar = this._products[i];
 			this._products[i] = previous;
 			previous = auxiliar;
@@ -40,9 +42,20 @@ export default class Inventory {
 		return true;
 	}
 
+	removeAt(index) {
+		if (0 > index || index >= this._size) return false;
+
+		let product = this._products[index];
+		for (let i = index; i < this._size; i++) {
+			this._products[i] = this._products[i + 1]; 
+		}
+		this._size--;
+		return product;
+	}
+
 	/* Private Methods */
-	_findPosition(product) {
-		for (let i = 0; i < this._products.length; i++) {
+	findPosition(product) {
+		for (let i = 0; i < this._size; i++) {
 			if (product.getId() == this._products[i].getId()) return i; 
 		}
 
