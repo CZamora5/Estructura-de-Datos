@@ -6,7 +6,7 @@ export default class Inventory {
 	/* Getter Methods */
 	getProductById(id) {
 		for (let product of this._products.length) {
-			if (product.getId() == id) return product; 
+			if (product.getId() == id) return product;
 		}
 
 		return null;
@@ -20,7 +20,14 @@ export default class Inventory {
 		return this._products;
 	}
 
-	/* Methods */
+	/* Public Methods */
+	addProduct(product) {
+		if (this._findPosition(product) >= 0) return 'ya existe';
+		if (this._products.length >= 20) return 'lleno';
+		this._products.push(product);
+		return true;
+	}
+
 	insertAt(product, index) {
 		if (0 > index || index >= this._products.length) return false;
 
@@ -32,5 +39,14 @@ export default class Inventory {
 		}
 		this._products.push(previous);
 		return true;
+	}
+
+	/* Private Methods */
+	_findPosition(product) {
+		for (let i = 0; i < this._products.length; i++) {
+			if (product.getId() == this._products[i].getId()) return i; 
+		}
+
+		return -1;
 	}
 }
