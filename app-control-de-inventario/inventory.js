@@ -24,9 +24,13 @@ export default class Inventory {
 	/* Public Methods */
 	addProduct(product) {
 		if (this.findPosition(product) >= 0) return false;
-		this._products[this._size] = product;
-		this._size++;
-		return true;
+		if (this._products.length == this._size) {
+                    // Tenemos this._products.length >= this._size, por definición. Cuando ambos son iguales tendremos que hacer
+                    // un push para no tener un error acceso. Cuando el vector tiene más capacidad solo modificamos la posición.
+                    this._products.push(product);
+                } else this._products[this._size] = product;
+                this._size++;
+                return true;
 	}
 
 	insertAt(product, index) {
