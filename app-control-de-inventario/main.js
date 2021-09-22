@@ -114,14 +114,13 @@ class App {
             this._paragraph.innerHTML = `
                                             <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
                                         `;
-            return null;
+            return;
         }
 
         this._paragraph.innerHTML = `
                                         <strong>El producto con id ${id} es</strong><br>
                                         ${this._infoHTML(product)}
                                     `;
-        return product;
     }
 
     listProducts = () => {
@@ -168,9 +167,7 @@ class App {
         }
         this._paragraph.innerHTML = `
                                         <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
-                                        ${this._infoHTML(product)}<br><br>
-                                        <strong>Se eliminó el siguiente producto</strong><br>
-                                        ${this._infoHTML(previous)}
+                                        ${this._infoHTML(product)}<br>
                                     `;
     }
 
