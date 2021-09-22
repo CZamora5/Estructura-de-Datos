@@ -155,6 +155,11 @@ class App {
         index = parseInt(index);
         document.querySelector('form').reset();
 
+        // Primero verificamos que el inventario tenga espacio
+        if (this._inventory.getLength() >= this._capacity) {
+            Swal.fire('Error', 'El inventario está lleno', 'error');
+            return;
+        }
         if (this._inventory.getProductById(product.getId()) != null) {
             Swal.fire('Error', 'Este id ya se encuentra en el inventario', 'error');
             return;
