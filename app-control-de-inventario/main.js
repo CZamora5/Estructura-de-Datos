@@ -34,7 +34,7 @@ class App {
 
         if (!(id && name && quantity && cost)) {
             Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return false;
+            return null;
         }
         
         return new Product(parseInt(id), name, parseFloat(quantity), parseFloat(cost));
@@ -42,7 +42,7 @@ class App {
 
     addProduct = () => {
         let product = this.readForm();
-        if (product == false) return;
+        if (product == null) return;
         document.querySelector('form').reset();
 
         // Primero verificamos que el inventario tenga espacio
