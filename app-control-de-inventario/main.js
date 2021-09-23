@@ -138,7 +138,7 @@ class App {
         const products = this._inventory.getProducts();
         for (let i = 0; i < this._inventory.getLength(); i++) {
             this._paragraph.innerHTML += `
-                                            <strong>Producto #${i + 1}</strong><br>
+                                            <strong>Producto #${this._inventory.getLength() - i}</strong><br>
                                             ${this._infoHTML(products[this._inventory.getLength() - 1 - i])}<br>
                                         `;
         }
@@ -174,6 +174,8 @@ class App {
                                         <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
                                         ${this._infoHTML(product)}<br>
                                     `;
+
+        this._updateCounter();
     }
 
     /* Private Methods */
