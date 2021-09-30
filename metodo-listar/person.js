@@ -1,4 +1,4 @@
-class Person {
+export default class Person {
     constructor(name, age) {
         this._name = name;
         this._age = age;
@@ -16,5 +16,10 @@ class Person {
 
     getNext() {
         return this._next;
+    }
+
+    /* Setter Methods */
+    setNext(person) {
+        this._next = person;
     }
 }
