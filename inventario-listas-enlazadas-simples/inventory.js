@@ -1,60 +1,76 @@
 export default class Inventory {
 	constructor() {
-		this._products = [];
+		this._head = null;
+		this._end = null;
+		this._size = 0;
 	}
 
 	/* Getter Methods */
 	getProductById(id) {
-		for (let i = 0; i < this._products.length; i++) {
-			if (this._products[i].getId() == id) return this._products[i];
+		let aux = this._head;
+		while (aux != null) {
+			if (aux.getId() == id) return aux;
+			aux = aux.getNext();
 		}
-
 		return null;
 	}
 
 	getLength() {
-		return this._products.length;
-	}
-
-	getProducts() {
-		return this._products;
+		return this._size;
 	}
 
 	/* Public Methods */
 	addProduct(product) {
-		if (this.findPosition(product) >= 0) return false;
+		if (this.getProductById(product.getId()) != null) return false;
 
-		this._products.push(product);
+		if (this._size == 0) {
+			this._head = product;
+			this._end = product;
+		} else {
+			this._end.setNext(product);
+		}
+		this._size++;
 		return true;
 	}
 
 	insertAt(product, index) {
-		if (0 > index || index > this._products.length) return false;
-		this._products.push(null);
+		if (0 > index || index > this._size) return false;
+		if (index == this._size) return addProduct(product);
+		if (this.getProductById(product.getId()) != null) return false;
 
-		for (let i = this._products.length - 2; i >= index; i--) {
-			this._products[i + 1] = this._products[i]; 
+		let aux = this._head;
+		for (let i = 0; i < index; i++) {
+			aux = aux.getNext();
 		}
-		this._products[index] = product;
+		product.setNext(aux.getNext());
+		aux.setNext(product);
+		this._size++;
 		return true;
 	}
 
 	removeAt(index) {
-		if (0 > index || index >= this._products.length) return null;
-
-		let product = this._products[index];
-		for (let i = index; i < this._products.length - 1; i++) {
-			this._products[i] = this._products[i + 1]; 
+		let product = null;
+		if (0 > index || index >= this._size) return product;
+		if (this._size == 1) {
+			product = this._head;
+			this._head = null;
+			this._end = null;
+		} else if (index == 0) {
+			product = this._head;
+			this._head = this._head.getNext();
+		} else {
+			let aux = this._head;
+			for (let i = 0; i < index; i++) {
+				aux = aux.getNext();
+			}
+			if (this._size == index + 1) {
+				this._end = aux;
+			}
+			product = aux.getNext();
+			aux.setNext(aux.getNext().getNext());
 		}
-		this._products.pop();
+		product.setNext(null);
+		this._size--;
 		return product;
-	}
-
-	findPosition(product) {
-		for (let i = 0; i < this._products.length; i++) {
-			if (product.getId() == this._products[i].getId()) return i; 
-		}
-
-		return -1;
 	}
 }

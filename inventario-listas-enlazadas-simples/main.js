@@ -5,7 +5,7 @@ class App {
     constructor(capacity) {
         this._capacity = capacity;
         this._inventory = new Inventory();
-        this._paragraph = document.getElementById('paragraph');
+        this._infoDiv = document.getElementById('infoDiv');
         
         this._btnAdd = document.getElementById('btnAdd');
         this._btnReset = document.getElementById('btnReset');
@@ -58,10 +58,10 @@ class App {
         }
         
         Swal.fire('Correcto', 'Se agregó un nuevo producto', 'success');
-        this._paragraph.innerHTML = `
-                                        <strong>Se ha agregado un nuevo producto</strong><br>
-                                        ${this._infoHTML(product)}
-                                    `;
+        this._infoDiv.innerHTML = `
+                                    <strong>Se ha agregado un nuevo producto</strong><br>
+                                    ${product.getInfo()}
+                                `;
         this._updateCounter();
     }
 
@@ -81,9 +81,9 @@ class App {
 
         let product = this._inventory.getProductById(id);
         if (product == null) {
-            this._paragraph.innerHTML = `
-                                            <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
-                                        `;
+            this._infoDiv.innerHTML = `
+                                        <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
+                                    `;
             return;
         }
 
@@ -91,10 +91,10 @@ class App {
         // de hecho ya tengo el producto guardado en la variable producto
         let position = this._inventory.findPosition(product);
         this._inventory.removeAt(position);
-        this._paragraph.innerHTML = `
-                                        <strong>Se ha eliminado el producto</strong><br>
-                                        ${this._infoHTML(product)}
-                                    `;
+        this._infoDiv.innerHTML = `
+                                    <strong>Se ha eliminado el producto</strong><br>
+                                    ${product.getInfo()}
+                                `;
         this._updateCounter();
     }
 
@@ -110,36 +110,36 @@ class App {
 
         let product = this._inventory.getProductById(id);
         if (product == null) {
-            this._paragraph.innerHTML = `
-                                            <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
-                                        `;
+            this._infoDiv.innerHTML = `
+                                        <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
+                                    `;
             return;
         }
 
-        this._paragraph.innerHTML = `
-                                        <strong>El producto con id ${id} es</strong><br>
-                                        ${this._infoHTML(product)}
-                                    `;
+        this._infoDiv.innerHTML = `
+                                    <strong>El producto con id ${id} es</strong><br>
+                                    ${product.getInfo()}
+                                `;
     }
 
     listProducts = () => {
-        this._paragraph.innerHTML = '';
+        this._infoDiv.innerHTML = '';
         for (let i = 0; i < this._inventory.getLength(); i++) {
-            this._paragraph.innerHTML += `
-                                            <strong>Producto #${i + 1}</strong><br>
-                                            ${this._infoHTML(this._inventory.getProducts()[i])}<br>
-                                        `;
+            this._infoDiv.innerHTML += `
+                                        <strong>Producto #${i + 1}</strong><br>
+                                        ${this._inventory.getProducts()[i].getInfo()}<br>
+                                    `;
         }
     }
 
     reverseListProducts = () => {
-        this._paragraph.innerHTML = '';
+        this._infoDiv.innerHTML = '';
         const products = this._inventory.getProducts();
         for (let i = 0; i < this._inventory.getLength(); i++) {
-            this._paragraph.innerHTML += `
-                                            <strong>Producto #${this._inventory.getLength() - i}</strong><br>
-                                            ${this._infoHTML(products[this._inventory.getLength() - 1 - i])}<br>
-                                        `;
+            this._infoDiv.innerHTML += `
+                                        <strong>Producto #${this._inventory.getLength() - i}</strong><br>
+                                        ${products[this._inventory.getLength() - 1 - i].getInfo()}<br>
+                                    `;
         }
     }
 
@@ -169,23 +169,15 @@ class App {
             Swal.fire('Error', 'Se ingreso una posición no válida, consulta las instrucciones', 'error');
             return;
         }
-        this._paragraph.innerHTML = `
-                                        <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
-                                        ${this._infoHTML(product)}<br>
-                                    `;
+        this._infoDiv.innerHTML = `
+                                    <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
+                                    ${product.getInfo()}<br>
+                                `;
 
         this._updateCounter();
     }
 
     /* Private Methods */
-    _infoHTML(product) {
-        return `
-                    Id de producto: ${product.getId()}<br>
-                    Nombre de producto: ${product.getName()}<br>
-                    Valor en inventario: ${product.getTotalCost()}<br>
-              `;
-    }
-
     _updateCounter() {
         document.getElementById('counter').innerHTML = this._inventory.getLength();
     }
