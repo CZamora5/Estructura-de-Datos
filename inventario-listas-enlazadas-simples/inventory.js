@@ -127,7 +127,7 @@ export default class Inventory {
 		let aux = this._head;
 		while (aux != null) {
 			if (aux.getId() == product.getId()) 
-			return true;
+				return true;
 			aux = aux.getNext();
 		}
 		return false;
