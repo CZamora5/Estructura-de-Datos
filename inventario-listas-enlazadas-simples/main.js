@@ -185,3 +185,27 @@ class App {
 
 // Creamos una instancia para habilitar los event listeners
 new App(20);
+
+let inventory = new Inventory();
+inventory.addProduct(new Product(1, 'Carlos', 2, 2));
+inventory.addProduct(new Product(2, 'Ramiro', 3, 3));
+inventory.addProduct(new Product(3, 'Margaro', 4, 4));
+inventory.addProduct(new Product(4, 'Nepo', 5, 5));
+inventory.addProduct(new Product(5, 'Luis', 6, 6));
+inventory.addProduct(new Product(6, 'Oscar', 7, 7));
+
+console.log(inventory);
+let list = inventory.getList(), 
+    reverseList = inventory.getReverseList();
+let $infoDiv = document.getElementById('infoDiv');
+// $infoDiv.innerHTML = list;
+// $infoDiv.innerHTML = reverseList;
+// document.write(inventory.getReverseList());
+console.log(inventory.removeAt(2));
+console.log(inventory.removeAt(inventory.getLength()));
+console.log(inventory.insertAt(new Product(1, 'Carlos', 2, 2), 3));
+console.log(inventory.insertAt(new Product(10, 'Carlos', 2, 2), 5));
+console.log(inventory.insertAt(new Product(11, 'Carlos', 2, 2), 6));
+console.log(inventory.insertAt(new Product(0, 'Carlos', 2, 2), 1));
+$infoDiv.innerHTML = inventory.getList();
+$infoDiv.innerHTML = inventory.getReverseList();
