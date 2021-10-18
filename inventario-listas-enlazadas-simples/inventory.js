@@ -37,7 +37,7 @@ export default class Inventory {
 
 	/* Public Methods */
 	addProduct(product) {
-		if (this._alreadyExists(product)) 
+		if (this.alreadyExists(product)) 
 			return false;
 
 		if (this._head == null) {
@@ -55,7 +55,7 @@ export default class Inventory {
 	}
 
 	insertAt(product, index) {
-		if (this._length + 1 < index || index <= 0 || this._alreadyExists(product)) 
+		if (this._length + 1 < index || index <= 0) 
 			return false;
 
 		if (index == 1) {
@@ -96,17 +96,50 @@ export default class Inventory {
 		return product;
 	}
 
-	/* Private Methods */
-	_alreadyExists(product) {
+	removeById(id) {
+		let product = null;
+
+		if (this._head == null) return product;
+
+		if (this._head.getId() == id) {
+			product = this._head;
+			this._head = product.getNext();
+		} else {
+			let aux = this._head;
+			while (aux.getNext() != null) {
+				if (aux.getNext().getId() == id) {
+					product = aux.getNext();
+					aux.setNext(product.getNext());
+					break;
+				}
+				aux = aux.getNext();
+			}
+		}
+
+		if (product != null) { 
+			product.setNext(null);
+			this._length--;
+		}
+		return product;
+	}
+
+	alreadyExists(product) {
 		let aux = this._head;
 		while (aux != null) {
 			if (aux.getId() == product.getId()) 
-				return true;
+			return true;
 			aux = aux.getNext();
 		}
 		return false;
 	}
 
+	getProductPosition(product, node = this._head, curIndex = 1) {
+		if (node == null) return -1;
+		if (node.getId() == product.getId()) return curIndex;
+		return this.getProductPosition(product, node.getNext(), curIndex + 1);
+	}
+	
+	/* Private Methods */
 	_getList(node = this._head, curIndex = 1) {
 		if (node == null) return '';
 		let nodeInfo = `
