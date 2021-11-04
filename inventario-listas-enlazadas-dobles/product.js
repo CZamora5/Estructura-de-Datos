@@ -4,36 +4,43 @@ export default class Product {
         this._name = name;
         this._quantity = quantity;
         this._cost = cost;
+        this._totalCost = this._cost * this._quantity;
         this._next = null;
+        this._prev = null;
     }
 
     /* Getter Methods */
-    getId() {
+    get id() { 
         return this._id;
     }
 
-    getName() {
-        return this._name;
+    get totalCost() {
+        return this._totalCost;
     }
 
-    getTotalCost() {
-        return this._quantity * this._cost;
-    }
-
-    getNext() {
+    get next() {
         return this._next;
     }
 
+    get previous() {
+        return this._prev;
+    }
+
+    /* Setter Methods */
+    set next(product) {
+        this._next = product;
+    }
+
+    set previous(product) {
+        this._prev = product;
+    }
+
+    /* Public Methods */
     getInfo() {
     return `
             Id de producto: ${this._id}<br>
             Nombre de producto: ${this._name}<br>
-            Valor en inventario: ${this.getTotalCost()}<br>
+            Valor en inventario: ${this._totalCost}<br>
         `;
     }
-
-    /* Setter Methods */
-    setNext(product) {
-        this._next = product;
-    } 
 }
