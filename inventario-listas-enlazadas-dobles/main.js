@@ -5,28 +5,24 @@ class App {
     constructor(maxCapacity) {
         this._maxCapacity = maxCapacity;
         this._inventory = new Inventory();
-        this._$infoDiv = document.getElementById('infoDiv');
+        this._$infoDiv = document.getElementById('info-div');
         
-        this._$btnAdd = document.getElementById('btnAdd');
-        this._$btnReset = document.getElementById('btnReset');
-        this._$btnDelete = document.getElementById('btnDelete');
-        this._$btnSearch = document.getElementById('btnSearch');
-        this._$btnList = document.getElementById('btnList');
-        this._$btnReverse = document.getElementById('btnReverse');
-        this._$btnInsert = document.getElementById('btnInsert');
+        this._$btnAdd = document.getElementById('btn-add');
+        this._$btnDelete = document.getElementById('btn-delete');
+        this._$btnSearch = document.getElementById('btn-search');
+        this._$btnList = document.getElementById('btn-list');
+        this._$btnReverse = document.getElementById('btn-reverse');
 
         this._$btnAdd.addEventListener('click', this.addProduct);
-        this._$btnReset.addEventListener('click', this.reset);
         this._$btnDelete.addEventListener('click', this.deleteProduct);
         this._$btnSearch.addEventListener('click', this.searchProduct);
         this._$btnList.addEventListener('click', this.listProducts);
         this._$btnReverse.addEventListener('click', this.reverseListProducts);
-        this._$btnInsert.addEventListener('click', this.insertProduct);
     }
 
     readForm() {
-        const FIELDS = ['id', 'name', 'quantity', 'cost'];
-        let values = FIELDS.map(field => document.getElementById(field).value);
+        const fields = ['id', 'name', 'quantity', 'cost'];
+        let values = fields.map(field => document.getElementById(field).value);
 
         let [id, name, quantity, cost] = values;
         name.trim();
@@ -42,7 +38,7 @@ class App {
     addProduct = () => {
         let product = this.readForm();
         if (product == null) return;
-        document.querySelector('form').reset();
+        this.reset();
 
         // Primero verificamos que el inventario tenga espacio
         if (this._inventory.getLength() >= this._maxCapacity) {
@@ -77,7 +73,7 @@ class App {
         }
 
         id = parseInt(id);
-        document.querySelector('form').reset();
+        this.reset();
 
         let product = this._inventory.removeById(id);
         if (product == null) {
@@ -102,7 +98,7 @@ class App {
         }
 
         id = parseInt(id);
-        document.querySelector('form').reset();
+        this.reset();
 
         let product = this._inventory.getProductById(id);
         if (product == null) {
@@ -123,42 +119,7 @@ class App {
     }
 
     reverseListProducts = () => {
-        this._$infoDiv.innerHTML = this._$infoDiv.innerHTML = this._inventory.getReverseList();
-    }
-
-    insertProduct = () => {
-        let product = this.readForm();
-        let index = document.getElementById('insertAt').value;
-        if (!(product && index)) {
-            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return;
-        }
-
-        index = parseInt(index);
-        document.querySelector('form').reset();
-
-        // Primero verificamos que el inventario tenga espacio
-        if (this._inventory.getLength() >= this._maxCapacity) {
-            Swal.fire('Error', 'El inventario está lleno', 'error');
-            return;
-        }
-
-        if (this._inventory.alreadyExists(product) && this._inventory.getProductPosition(product) != index) {
-            Swal.fire('Error', 'Ya se encuentra en el inventario un producto con la id añadida', 'error');
-            return;
-        }
-
-        let success = this._inventory.insertAt(product, index);
-        if (!success) {
-            Swal.fire('Error', 'Se ingreso una posición no válida, consulta las instrucciones', 'error');
-            return;
-        }
-        this._$infoDiv.innerHTML = `
-            <strong>Se ha agregado un nuevo producto en la posición ${index}</strong><br>
-            ${product.getInfo()}<br>
-        `;
-
-        this._updateCounter();
+        this._$infoDiv.innerHTML = this._inventory.getReverseList();
     }
 
     /* Private Methods */
