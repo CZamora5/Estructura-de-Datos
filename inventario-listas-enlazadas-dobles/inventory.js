@@ -3,24 +3,25 @@ export default class Inventory {
 		this._head = null;
 		this._length = 0;
 	}
+	
+	/* Getter Methods*/
+	get length() {
+		return this._length;
+	}
 
-	/* Getter Methods */
+	/* Public Methods */
 	getProductById(id) {
-		let aux = this._head;
-		while (aux != null) {
-			if (aux.getId() == id) 
-				return aux;
-			aux = aux.getNext();
+		let tmp = this._head;
+		while (tmp !== null) {
+			if (tmp.id === id) 
+				return tmp;
+			tmp = tmp.next;
 		}
 		return null;
 	}
 
-	getLength() {
-		return this._length;
-	}
-
 	getList() {
-		if (this._head == null) {
+		if (this._head === null) {
 			return '<strong>No hay productos en inventario<strong>'
 		} 
 
@@ -28,133 +29,99 @@ export default class Inventory {
 	}
 
 	getReverseList() {
-		if (this._head == null) {
+		if (this._head === null) {
 			return '<strong>No hay productos en inventario<strong>'
 		} 
 
 		return this._getReverseList();
 	}
 
-	/* Public Methods */
 	addProduct(product) {
 		if (this.alreadyExists(product)) 
 			return false;
+			
+		let tmp = this._head;
 
-		if (this._head == null) {
+		if (tmp === null) {
 			this._head = product;
+		} else if (tmp.id > product.id) {
+			this._head = product;
+			tmp.previous = product;
+			product.next = tmp
 		} else {
-			let aux = this._head;
-			while (aux.getNext() != null) {
-				aux = aux.getNext();
+			while (tmp.next !== null && tmp.next.id < product.id) {
+				tmp = tmp.next;
 			}
-			aux.setNext(product);
+
+			if (tmp.next !== null) {
+				tmp.next.previous = product;
+				product.next = tmp.next;
+			}
+
+			tmp.next = product;
+			product.previous = tmp;
 		}
 
 		this._length++;
 		return true;
-	}
-
-	insertAt(product, index) {
-		if (this._length + 1 < index || index <= 0) 
-			return false;
-
-		if (index == 1) {
-			product.setNext(this._head);
-			this._head = product;
-		} else {
-			let aux = this._head;
-			for (let i = 0; i < index - 2; i++) {
-				aux = aux.getNext();
-			}
-			product.setNext(aux.getNext());
-			aux.setNext(product);
-		}
-		this._length++;
-		return true;
-	}
-
-	removeAt(index) {
-		let product = null;
-	
-		if (this._length < index || index <= 0) 
-			return product;
-
-		if (index == 1) {
-			product = this._head;
-			this._head = product.getNext();
-		} else {
-			let aux = this._head;
-			for (let i = 0; i < index - 2; i++) {
-				aux = aux.getNext();
-			}
-			product = aux.getNext();
-			aux.setNext(product.getNext());
-		}
-
-		this._length--;
-		product.setNext(null);
-		return product;
 	}
 
 	removeById(id) {
 		let product = null;
+		let tmp = this._head;
 
-		if (this._head == null) return product;
-
-		if (this._head.getId() == id) {
-			product = this._head;
-			this._head = product.getNext();
+		if (tmp === null) return product;
+		
+		if (tmp.id === id) {
+			product = tmp;
+			this._head = product.next;
 		} else {
-			let aux = this._head;
-			while (aux.getNext() != null) {
-				if (aux.getNext().getId() == id) {
-					product = aux.getNext();
-					aux.setNext(product.getNext());
+			while (tmp.next !== null) {
+				if (tmp.next.id === id) {
+					product = tmp.next;
+					tmp.next = product.next;
+					if (product.next !== null) 
+						product.next.previous = product.previous;
 					break;
 				}
-				aux = aux.getNext();
+				tmp = tmp.next;
 			}
 		}
 
-		if (product != null) { 
-			product.setNext(null);
-			this._length--;
-		}
+		if (product === null) return product;
+
+		product.previous = null;
+		product.next = null;
+		this._length--;
 		return product;
 	}
 
 	alreadyExists(product) {
-		let aux = this._head;
-		while (aux != null) {
-			if (aux.getId() == product.getId()) 
+		let tmp = this._head;
+		while (tmp !== null) {
+			if (tmp.id === product.id)
 				return true;
-			aux = aux.getNext();
+			tmp = tmp.next;
 		}
 		return false;
 	}
-
-	getProductPosition(product, node = this._head, curIndex = 1) {
-		if (node == null) return -1;
-		if (node.getId() == product.getId()) return curIndex;
-		return this.getProductPosition(product, node.getNext(), curIndex + 1);
-	}
 	
 	/* Private Methods */
-	_getList(node = this._head, curIndex = 1) {
-		if (node == null) return '';
+	_getList(node = this._head, nodeIndex = 1) {
+		if (node === null) return '';
 		let nodeInfo = `
-			<strong>Producto #${curIndex}</strong><br>
+			<strong>Producto #${nodeIndex}</strong><br>
 			${node.getInfo()}<br>
 		`;
-		return nodeInfo + this._getList(node.getNext(), curIndex + 1);
+		return nodeInfo + this._getList(node.next, nodeIndex + 1);
 	}
 
-	_getReverseList(node = this._head, curIndex = 1) {
-		if (node == null) return '';
+	_getReverseList(node = this._head, nodeIndex = 1) {
+		if (node === null) return '';
 		let nodeInfo = `
-			<strong>Producto #${curIndex}</strong><br>
+			<strong>Producto #${nodeIndex}</strong><br>
 			${node.getInfo()}<br>
 		`;
-		return this._getReverseList(node.getNext(), curIndex + 1) + nodeInfo;
+		return this._getReverseList(node.next, nodeIndex + 1) + nodeInfo;
 	}
 }

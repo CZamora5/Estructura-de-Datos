@@ -37,18 +37,18 @@ class App {
 
     addProduct = () => {
         let product = this.readForm();
-        if (product == null) return;
+        if (product === null) return;
         this.reset();
 
         // Primero verificamos que el inventario tenga espacio
-        if (this._inventory.getLength() >= this._maxCapacity) {
+        if (this._inventory.length >= this._maxCapacity) {
             Swal.fire('Error', 'El inventario está lleno', 'error');
             return;
         }
 
         // Ahora agregamos, si el producto ya se encontraba en inventario marcaremos error y no se agregará nada
         let result = this._inventory.addProduct(product);
-        if (result == false) {
+        if (result === false) {
             Swal.fire('Error', 'Ya existe un producto con esta Id', 'error');
             return;
         }
@@ -76,7 +76,7 @@ class App {
         this.reset();
 
         let product = this._inventory.removeById(id);
-        if (product == null) {
+        if (product === null) {
             this._$infoDiv.innerHTML = `
                 <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
             `;
@@ -101,7 +101,7 @@ class App {
         this.reset();
 
         let product = this._inventory.getProductById(id);
-        if (product == null) {
+        if (product === null) {
             this._$infoDiv.innerHTML = `
                 <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
             `;
@@ -124,7 +124,7 @@ class App {
 
     /* Private Methods */
     _updateCounter() {
-        document.getElementById('counter').innerHTML = this._inventory.getLength();
+        document.getElementById('counter').innerHTML = this._inventory.length;
     }
 }
 
