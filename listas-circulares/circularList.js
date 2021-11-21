@@ -1,121 +1,143 @@
 export default class CircularList {
-	constructor() {
-		this._head = null;
-		this._tail = null;
-	}
+  constructor() {
+    this._head = null;
+    this._tail = null;
+  }
 
-	/* Public Methods */
-	getStationByName(name) {
-		let tmp = this._head;
+  /* Public Methods */
+  getStationByName(name) {
+    let tmp = this._head;
 
-		if (tmp === null) return tmp;
-		if (this._tail.name === name) return this._tail;
+    if (tmp === null) return tmp;
+    if (this._tail.name === name) return this._tail;
 
-		while (tmp.next !== this._head) {
-			if (tmp.name === name) return tmp;
-			tmp = tmp.next;
-		}
-		return null;
-	}
+    while (tmp.next !== this._head) {
+      if (tmp.name === name) return tmp;
+      tmp = tmp.next;
+    }
+    return null;
+  }
 
-	addStation(station) {
-		if (alreadyExists(station)) return false;
+  alreadyExists(name) {
+    let tmp = this._head;
 
-		if (this._head === null) {
-			this._head = station;
-			this._tail = station;
-			station.next = station;
-			station.previous = station;
-		} else {
-			this._head.previous = station;
-			this._tail.next = station;
-			station.next = this._head;
-			station.previous = this._tail;
-			this._tail = station;
-		}
+    if (tmp === null) return false;
+    if (this._tail.name === name) return true;
 
-		return true;
-	}
+    while (tmp.next !== this._head) {
+      if (tmp.name === name) return true;
+      tmp = tmp.next;
+    }
+    return false;
+  }
 
-	removeByName(name) {
-		let tmp = this._head;
+  addStation(station) {
+    if (alreadyExists(station.name)) return false;
 
-		if (tmp === null) return tmp;
+    if (this._head === null) {
+      this._head = station;
+      this._tail = station;
+      station.next = station;
+      station.previous = station;
+    } else {
+      this._head.previous = station;
+      this._tail.next = station;
+      station.next = this._head;
+      station.previous = this._tail;
+      this._tail = station;
+    }
 
-		if (this._head.name === name && this._tail.name === name) {
-			this._head = null;
-			this._tail = null;
-			tmp.previous = null;
-			tmp.next = null;
-			return tmp;
-		}
+    return true;
+  }
 
-		if (this._head.name === name) {
-			this._head = tmp.next;
-		} else if (this._tail.name === name) {
-			tmp = this._tail;
-			this._tail = tmp.previous;
-		} else {
-			while (tmp.next !== this._head) {
-				if (tmp.name === name) break;
-				tmp = tmp.next;
-			}
-		}
+  removeByName(name) {
+    let tmp = this._head;
 
-		if (tmp !== null) {
-			tmp.previous.next = tmp.next;
-			tmp.next.previous = tmp.previous;
-			tmp.next = null;
-			tmp.previous = null;
-		}
-		return tmp;
-	}
+    if (tmp === null) return tmp;
 
-	getList() {
-		if (this._head === null) {
-			return '<strong>No hay bases en la ruta<strong>';
-		} 
+    if (this._head.name === name && this._tail.name === name) {
+      this._head = null;
+      this._tail = null;
+      tmp.previous = null;
+      tmp.next = null;
+      return tmp;
+    }
 
-		return this._getList();
-	}
+    if (this._head.name === name) {
+      this._head = tmp.next;
+    } else if (this._tail.name === name) {
+      tmp = this._tail;
+      this._tail = tmp.previous;
+    } else {
+      while (tmp.next !== this._head) {
+        if (tmp.name === name) break;
+        tmp = tmp.next;
+      }
+    }
 
-	getReverseList() {
-		if (this._head === null) {
-			return '<strong>No hay bases en la ruta<strong>';
-		}
+    if (tmp !== null) {
+      tmp.previous.next = tmp.next;
+      tmp.next.previous = tmp.previous;
+      tmp.next = null;
+      tmp.previous = null;
+    }
+    return tmp;
+  }
 
-		return this._getReverseList();
-	}
+  getList() {
+    if (this._head === null) {
+      return "<b>No hay bases en la ruta</b>";
+    }
 
-	alreadyExists(station) {
-		let tmp = this._head;
+    return this._getList();
+  }
 
-		if (tmp === null) return false;
-		if (this._tail.name === station.name) return true;
+  getReverseList() {
+    if (this._head === null) {
+      return "<b>No hay bases en la ruta</b>";
+    }
 
-		while (tmp.next !== this._head) {
-			if (tmp.name === station.name) return true;
-			tmp = tmp.next;
-		}
-		return false;
-	}
-	
-	/* Private Methods */
-	_getList(node = this._head, nodeIndex = 1) {
-		if (node === this._head && nodeIndex > 1) return '';
-		let nodeInfo = `
-			<strong>Base #${nodeIndex}</strong><br>
+    return this._getReverseList();
+  }
+
+  createCard(name, startingTime, duration) {
+    let station = this.getStationByName(name);
+    if (station === null) {
+      return "<b>No existe ninguna base con el nombre ingresado</b><br>";
+    }
+
+    let msg = "<h2>Recorrido<h2>",
+      accDuration = 0;
+    while (duration >= accDuration) {
+      msg += `(${station.name}) > ${this._getTime(startingTime, accDuration)}`;
+      station = station.next;
+      accDuration += station.duration;
+    }
+    return msg;
+  }
+
+  /* Private Methods */
+  _getList(node = this._head, nodeIndex = 1) {
+    if (node === this._head && nodeIndex > 1) return "";
+    let nodeInfo = `
+			<b>Base #${nodeIndex}</b><br>
 			${node.getInfo()}<br>
 		`;
-		return nodeInfo + this._getList(node.next, nodeIndex + 1);
-	}
+    return nodeInfo + this._getList(node.next, nodeIndex + 1);
+  }
 
-	_getReverseList(node = this._head, nodeIndex = 1) {
-		if (node === this._head && nodeIndex > 1) return '';
-		let nodeInfo = `
-			<strong>Base #${nodeIndex}</strong><br>
+  _getReverseList(node = this._head, nodeIndex = 1) {
+    if (node === this._head && nodeIndex > 1) return "";
+    let nodeInfo = `
+			<b>Base #${nodeIndex}</b><br>
 			${node.getInfo()}<br>
 		`;
-		return this._getReverseList(node.next, nodeIndex + 1) + nodeInfo;
-	}
+    return this._getReverseList(node.next, nodeIndex + 1) + nodeInfo;
+  }
+
+  _getTime(start, duration) {
+    let h = toString((start + Math.floor(duration / 60)) % 24).padStart(2, "0");
+    let m = toString(duration % 60).padStart(2, "0");
+    return `${h}:${m}`;
+  }
 }
