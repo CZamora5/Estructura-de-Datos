@@ -86,27 +86,27 @@ export default class CircularList {
 
   getList() {
     if (this._head === null) {
-      return "<b>No hay bases en la ruta</b>";
+      return '<b>No hay bases en la ruta</b>';
     }
 
-    return this._getList();
+    return '<h3>Bases en la ruta</h3>' + this._getList();
   }
 
   getReverseList() {
     if (this._head === null) {
-      return "<b>No hay bases en la ruta</b>";
+      return '<b>No hay bases en la ruta</b>';
     }
 
-    return this._getReverseList();
+    return '<h3>Bases en la ruta</h3>' + this._getReverseList();
   }
 
   createCard(name, startingTime, duration) {
     let station = this.getStationByName(name);
     if (station === null) {
-      return "<b>No existe ninguna base con el nombre ingresado</b><br>";
+      return '<b>No existe ninguna base con el nombre ingresado</b><br>';
     }
 
-    let msg = "<h2>Recorrido<h2>",
+    let msg = '<h3>Recorrido</h3>',
       accDuration = 0;
     while (duration >= accDuration) {
       msg += `(${station.name}) > ${this._getTime(startingTime, accDuration)}`;
@@ -118,7 +118,7 @@ export default class CircularList {
 
   /* Private Methods */
   _getList(node = this._head, nodeIndex = 1) {
-    if (node === this._head && nodeIndex > 1) return "";
+    if (node === this._head && nodeIndex > 1) return '';
     let nodeInfo = `
 			<b>Base #${nodeIndex}</b><br>
 			${node.getInfo()}<br>
@@ -127,7 +127,7 @@ export default class CircularList {
   }
 
   _getReverseList(node = this._head, nodeIndex = 1) {
-    if (node === this._head && nodeIndex > 1) return "";
+    if (node === this._head && nodeIndex > 1) return '';
     let nodeInfo = `
 			<b>Base #${nodeIndex}</b><br>
 			${node.getInfo()}<br>
@@ -136,8 +136,8 @@ export default class CircularList {
   }
 
   _getTime(start, duration) {
-    let h = toString((start + Math.floor(duration / 60)) % 24).padStart(2, "0");
-    let m = toString(duration % 60).padStart(2, "0");
+    let h = toString((start + Math.floor(duration / 60)) % 24).padStart(2, '0');
+    let m = toString(duration % 60).padStart(2, '0');
     return `${h}:${m}`;
   }
 }

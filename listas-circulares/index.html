@@ -4,38 +4,80 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="./style.css">
     <title>Listas circulares</title>
 </head>
 <body>
-	<h1>Base de autobuses con listas circulares</h1>
-	<h3>Instrucciones</h3>
-	<ul>
-		<li>Para agregar una base debes insertar un nombre y una cantidad de minutos que son los que se tarda un camión en ella.</li>
-		<li>Para eliminar o buscar una base únicamente debes insertar su nombre.</li>
-		<li>Listar ya sea en orden o en reversa no requiere ningún input.</li>
-	</ul>
-	<div>
-		<form>
-			<label>Nombre:</label>
-			<input type="text" id="name"><br>
+	<header>
+		<div class="container">
+			<h1>Base de autobuses con listas circulares</h1>
+		</div>
+	</header>
+	<main class="content container">
+		<section>
+			<div class="section-header">
+				<h2>Instrucciones para modificar la ruta</h2>
+			</div>
+			<div class="section-content">
+				<ul>
+					<li>Para agregar una base debes insertar un nombre y una cantidad de minutos que son los que se tarda un camión en ella.</li>
+					<li>Para eliminar o buscar una base únicamente debes insertar su nombre.</li>
+					<li>Listar ya sea en orden o en reversa no requiere ningún input.</li>
+				</ul>
+				<div class="form-container">
+					<form>
+						<label>Nombre:</label>
+						<input type="text" id="change-route__station-name">
 
-			<label>Minutos:</label>
-			<input type="number" id="minutes"><br>
+						<label>Duración en minutos:</label>
+						<input type="number" id="change-route__duration">
 
-			<button type="button" id="btn-add">Agregar</button>
-			<button type="reset">Cancelar</button>
-		</form>
-	</div>
+						<button type="button" class="btn" id="btn-add">Agregar</button>
+						<button type="reset" class="btn">Cancelar</button>
+					</form>
+				</div>
 
-	<div>
-		<button type="button" id="btn-delete">Eliminar</button>
-		<button type="button" id="btn-search">Buscar</button>
-		<button type="button" id="btn-list">Listar</button>
-		<button type="button" id="btn-reverse">Listar en reversa</button>
-	<div>
-	<p>Número de bases: <span id="counter">0</span></p>
-	<hr>
-	<div id="info-div"></div>
+				<div class="change_route__options">
+					<button type="button" class="btn" id="btn-delete">Eliminar</button>
+					<button type="button" class="btn" id="btn-search">Buscar</button>
+					<button type="button" class="btn" id="btn-list">Listar</button>
+					<button type="button" class="btn" id="btn-reverse">Listar en reversa</button>
+				<div>
+				<div class="info-div"></div>
+			</div>
+		</section>
+		<section>
+			<div class="section-header">
+				<h2>Instrucciones para crear tarjetas</h2>
+			</div>
+				<div class="section-content">
+				<ul>
+					<li>Para crear una tarjeta debes insertar el nombre de la base inicial, la hora de inicio y la duración total del recorrido en minutos.</li>
+					<li>La hora debe ser un número entero entre 0 y 23.</li>
+					<li>La cantidad de minutos debe ser un número entero positivo.</li>
+				</ul>
+				<div class="form-container">
+					<form>
+						<label>Nombre:</label>
+						<input type="text" id="create-card__station-name">
+
+						<label>Hora de inicio:</label>
+						<input type="number" id="create-card__starting-time">
+
+						<label>Duración en minutos:</label>
+						<input type="number" id="create-card__duration">
+
+						<button type="button" class="btn" id="btn-create">Crear tarjeta</button>
+						<button type="reset" class="btn">Cancelar</button>
+					</form>
+				</div>
+				<div class="info-div"></div>
+			</div>
+		</section>
+	</main>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="./main.js" type="module"></script>
 </body>
