@@ -1,132 +1,181 @@
-import CircularList from './circularList.js'
-import Station from './station.js'
+import CircularList from './circularList.js';
+import Station from './station.js';
 
 class App {
-    constructor(maxCapacity) {
-        this._maxCapacity = maxCapacity;
-        this._inventory = new Inventory();
-        this._$infoDiv = document.getElementById('info-div');
-        
-        this._$btnAdd = document.getElementById('btn-add');
-        this._$btnDelete = document.getElementById('btn-delete');
-        this._$btnSearch = document.getElementById('btn-search');
-        this._$btnList = document.getElementById('btn-list');
-        this._$btnReverse = document.getElementById('btn-reverse');
+  constructor() {
+    this._route = new CircularList();
+    this._$infoRouteChanges = document.querySelector('.change-route .info-div');
+    this._$infoCards = document.querySelector('.create-card .info-div');
 
-        this._$btnAdd.addEventListener('click', this.addProduct);
-        this._$btnDelete.addEventListener('click', this.deleteProduct);
-        this._$btnSearch.addEventListener('click', this.searchProduct);
-        this._$btnList.addEventListener('click', this.listProducts);
-        this._$btnReverse.addEventListener('click', this.reverseListProducts);
+    this._$btnAdd = document.getElementById('btn-add');
+    this._$btnDelete = document.getElementById('btn-delete');
+    this._$btnSearch = document.getElementById('btn-search');
+    this._$btnList = document.getElementById('btn-list');
+    this._$btnReverse = document.getElementById('btn-reverse');
+    this._$btnCreateCard = document.getElementById('btn-create');
+
+    this._$btnAdd.addEventListener('click', this.addStation);
+    this._$btnDelete.addEventListener('click', this.deleteStation);
+    this._$btnSearch.addEventListener('click', this.searchStation);
+    this._$btnList.addEventListener('click', this.listStations);
+    this._$btnReverse.addEventListener('click', this.reverseListStations);
+    this._$btnCreateCard.addEventListener('click', this.createCard);
+  }
+
+  addStation = () => {
+    let name = document
+      .getElementById('change-route__station-name')
+      .value.trim();
+    let duration = document.getElementById('change-route__duration').value;
+
+    if (!(name && duration)) {
+      Swal.fire(
+        'Error',
+        'Faltaron campos para esta operación, consulta las instrucciones',
+        'error'
+      );
+      return;
     }
 
-    readForm() {
-        const fields = ['id', 'name', 'quantity', 'cost'];
-        let values = fields.map(field => document.getElementById(field).value);
+    duration = parseInt(duration);
 
-        let [id, name, quantity, cost] = values;
-        name.trim();
-
-        if (!(id && name && quantity && cost)) {
-            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return null;
-        }
-        
-        return new Product(parseInt(id), name, parseFloat(quantity), parseFloat(cost));
+    if (duration <= 0) {
+      Swal.fire(
+        'Error',
+        'La duración debe ser un número entero positivo',
+        'error'
+      );
+      return;
     }
 
-    addProduct = () => {
-        let product = this.readForm();
-        if (product === null) return;
-        this.reset();
+    let station = new Station(name, duration);
+    this.reset('.change-route form');
 
-        // Primero verificamos que el inventario tenga espacio
-        if (this._inventory.length >= this._maxCapacity) {
-            Swal.fire('Error', 'El inventario está lleno', 'error');
-            return;
-        }
-
-        // Ahora agregamos, si el producto ya se encontraba en inventario marcaremos error y no se agregará nada
-        let result = this._inventory.addProduct(product);
-        if (result === false) {
-            Swal.fire('Error', 'Ya existe un producto con esta Id', 'error');
-            return;
-        }
-        
-        Swal.fire('Correcto', 'Se agregó un nuevo producto', 'success');
-        this._$infoDiv.innerHTML = `
-            <strong>Se ha agregado un nuevo producto</strong><br>
-            ${product.getInfo()}
-        `;
-        this._updateCounter();
+    let result = this._route.addStation(station);
+    if (result === false) {
+      Swal.fire('Error', 'Ya existe una base con ese nombre', 'error');
+      return;
     }
 
-    reset = () => {
-        document.querySelector('form').reset();
+    Swal.fire('Correcto', 'Se agregó una nueva base', 'success');
+    this._$infoRouteChanges.innerHTML = `
+      <h3>Se ha agregado una nueva base</h3>
+      ${station.getInfo()}
+    `;
+  };
+
+  createCard = () => {
+    let name = document
+      .getElementById('create-card__station-name')
+      .value.trim(); 
+    let startingTime = document.getElementById('create-card__starting-time').value;
+    let duration = document.getElementById('create-card__duration').value;
+
+    if (!(name && startingTime && duration)) {
+      Swal.fire(
+        'Error',
+        'Faltaron campos para esta operación, consulta las instrucciones',
+        'error'
+      );
+      return;
     }
 
-    deleteProduct = () => {
-        let id = document.getElementById('id').value;
-        if (!id) {
-            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return;
-        }
+    startingTime = parseInt(startingTime);
+    duration = parseInt(duration);
 
-        id = parseInt(id);
-        this.reset();
-
-        let product = this._inventory.removeById(id);
-        if (product === null) {
-            this._$infoDiv.innerHTML = `
-                <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
-            `;
-            return;
-        }
-
-        this._$infoDiv.innerHTML = `
-            <strong>Se ha eliminado el producto</strong><br>
-            ${product.getInfo()}
-        `;
-        this._updateCounter();
+    if (duration <= 0 || startingTime < 0 || startingTime > 23) {
+      Swal.fire(
+        'Error',
+        'Datos incorrectos, consulta las intrucciones',
+        'error'
+      );
+      return;
     }
 
-    searchProduct = () => {
-        let id = document.getElementById('id').value;
-        if (!id) {
-            Swal.fire('Error', 'Faltaron campos para esta operación, consulta las instrucciones', 'error');
-            return;
-        }
+    this.reset('.create-card form');
 
-        id = parseInt(id);
-        this.reset();
-
-        let product = this._inventory.getProductById(id);
-        if (product === null) {
-            this._$infoDiv.innerHTML = `
-                <strong>No se ha encontrado ningún producto con la id ${id}</strong><br>
-            `;
-            return;
-        }
-
-        this._$infoDiv.innerHTML = `
-            <strong>El producto con id ${id} es</strong><br>
-            ${product.getInfo()}
-        `;
+    let result = this._route.createCard(name, startingTime, duration);
+    if (result === '') {
+      Swal.fire('Error', `No existe ninguna base con el nombre ${name}`, 'error');
+      this._$infoCards.innerHTML = '<h3>No existe ninguna base con el nombre ingresado</h3>';
+      return;
     }
 
-    listProducts = () => {
-        this._$infoDiv.innerHTML = this._inventory.getList();
+    Swal.fire('Correcto', 'Se ha creado una nueva tarjeta', 'success');
+    this._$infoCards.innerHTML = result;
+  };
+
+  reset = (selector) => {
+    document.querySelector(selector).reset();
+  };
+
+  deleteStation = () => {
+    let name = document
+      .getElementById('change-route__station-name')
+      .value.trim();
+
+    if (!name) {
+      Swal.fire(
+        'Error',
+        'Faltaron campos para esta operación, consulta las instrucciones',
+        'error'
+      );
+      return;
     }
 
-    reverseListProducts = () => {
-        this._$infoDiv.innerHTML = this._inventory.getReverseList();
+    this.reset('.change-route form');
+
+    let station = this._route.removeByName(name);
+    if (station === null) {
+      this._$infoRouteChanges.innerHTML = `
+        <h3>No se ha encontrado ninguna base con el nombre ${name}</h3>
+      `;
+      return;
     }
 
-    /* Private Methods */
-    _updateCounter() {
-        document.getElementById('counter').innerHTML = this._inventory.length;
+    this._$infoRouteChanges.innerHTML = `
+      <h3>Se ha eliminado la base</h3>
+      ${station.getInfo()}
+    `;
+  };
+
+  searchStation = () => {
+    let name = document
+      .getElementById('change-route__station-name')
+      .value.trim();
+
+    if (!name) {
+      Swal.fire(
+        'Error',
+        'Faltaron campos para esta operación, consulta las instrucciones',
+        'error'
+      );
+      return;
     }
+
+    this.reset('.change-route form');
+
+    let station = this._route.getStationByName(name);
+    if (station === null) {
+      this._$infoRouteChanges.innerHTML = `
+        <h3>No se ha encontrado ninguna base con el nombre ${name}</h3>
+      `;
+      return;
+    }
+
+    this._$infoRouteChanges.innerHTML = `
+      <h3>La base con nombre ${name} es</h3>
+      ${station.getInfo()}
+    `;
+  };
+
+  listStations = () => {
+    this._$infoRouteChanges.innerHTML = this._route.getList();
+  };
+
+  reverseListStations = () => {
+    this._$infoRouteChanges.innerHTML = this._route.getReverseList();
+  };
 }
 
-// Creamos una instancia para habilitar los event listeners
-new App(20);
+new App();

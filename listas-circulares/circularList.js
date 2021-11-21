@@ -32,7 +32,7 @@ export default class CircularList {
   }
 
   addStation(station) {
-    if (alreadyExists(station.name)) return false;
+    if (this.alreadyExists(station.name)) return false;
 
     if (this._head === null) {
       this._head = station;
@@ -86,7 +86,7 @@ export default class CircularList {
 
   getList() {
     if (this._head === null) {
-      return '<b>No hay bases en la ruta</b>';
+      return '<h3>No hay bases en la ruta</h3>';
     }
 
     return '<h3>Bases en la ruta</h3>' + this._getList();
@@ -94,7 +94,7 @@ export default class CircularList {
 
   getReverseList() {
     if (this._head === null) {
-      return '<b>No hay bases en la ruta</b>';
+      return '<h3>No hay bases en la ruta</h3>';
     }
 
     return '<h3>Bases en la ruta</h3>' + this._getReverseList();
@@ -103,13 +103,13 @@ export default class CircularList {
   createCard(name, startingTime, duration) {
     let station = this.getStationByName(name);
     if (station === null) {
-      return '<b>No existe ninguna base con el nombre ingresado</b><br>';
+      return '';
     }
 
     let msg = '<h3>Recorrido</h3>',
       accDuration = 0;
     while (duration >= accDuration) {
-      msg += `(${station.name}) > ${this._getTime(startingTime, accDuration)}`;
+      msg += `(${station.name}) > ${this._getTime(startingTime, accDuration)}<br>`;
       station = station.next;
       accDuration += station.duration;
     }
@@ -136,8 +136,8 @@ export default class CircularList {
   }
 
   _getTime(start, duration) {
-    let h = toString((start + Math.floor(duration / 60)) % 24).padStart(2, '0');
-    let m = toString(duration % 60).padStart(2, '0');
+    let h = ((start + Math.floor(duration / 60)) % 24).toString().padStart(2, '0');
+    let m = (duration % 60).toString().padStart(2, '0');
     return `${h}:${m}`;
   }
 }
