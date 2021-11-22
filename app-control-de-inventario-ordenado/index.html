@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App para control de un inventario ordenado</title>
+</head>
+<body>
+	<h1>Inventario</h1>
+	<h3>Instrucciones</h3>
+	<ul>
+		<li>Para agregar un producto debes insertar ID, nombre, cantidad, y costo.</li>
+		<li>Para eliminar o buscar un producto únicamente debes insertar ID del producto.</li>
+		<li>Listar ya sea en orden o en reversa no requiere ningún input.</li>
+	</ul>
+	<div>
+		<form>
+			<label for='id'>ID del producto:
+				<input type='text' id='id'>
+			</label><br>
+			<label for='name'>Nombre del producto:
+				<input type='text' id='name'>
+			</label><br>
+			<label for='quantity'>Cantidad:
+				<input type='number' id='quantity'>
+			</label><br>
+			<label for='cost'>Costo:
+				<input type='number' id='cost'>
+			</label><br>
+			<button type='button' id='btnAdd'>Agregar</button>
+			<button type='reset' id='btnReset'>Cancelar</button>
+		</form>
+	</div>
+
+	<div id='actions'>
+		<button type='button' id='btnDelete'>Eliminar mediante ID</button>
+		<button type='button' id='btnSearch'>Buscar mediante ID</button>
+		<button type='button' id='btnList'>Listar</button>
+		<button type='button' id='btnInverse'>Listar en reversa</button>
+	<div>
+	<p>Número de productos en inventario:<span id='counter'>0</span></p>
+	<hr>
+	<div id='info'></div>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="main.js" type="module"></script>
+</body>
+</html>
