@@ -35,8 +35,10 @@
 						<label>Duración en minutos:</label>
 						<input type="number" id="change-route__duration">
 
-						<button type="button" class="btn" id="btn-add">Agregar</button>
-						<button type="reset" class="btn">Cancelar</button>
+						<div class="btns">
+							<button type="button" class="btn" id="btn-add">Agregar</button>
+							<button type="reset" class="btn">Cancelar</button>
+						</div>
 					</form>
 				</div>
 
@@ -45,15 +47,15 @@
 					<button type="button" class="btn" id="btn-search">Buscar</button>
 					<button type="button" class="btn" id="btn-list">Listar</button>
 					<button type="button" class="btn" id="btn-reverse">Listar en reversa</button>
-				<div>
-				<div class="info-div"></div>
+				</div>
 			</div>
+			<div class="info-div"></div>
 		</section>
 		<section class="create-card">
 			<div class="section-header">
 				<h2>Instrucciones para crear tarjetas</h2>
 			</div>
-				<div class="section-content">
+			<div class="section-content">
 				<ul>
 					<li>Para crear una tarjeta debes insertar el nombre de la base inicial, la hora de inicio y la duración total del recorrido en minutos.</li>
 					<li>La hora debe ser un número entero entre 0 y 23.</li>
@@ -70,12 +72,14 @@
 						<label>Duración en minutos:</label>
 						<input type="number" id="create-card__duration">
 
-						<button type="button" class="btn" id="btn-create">Crear tarjeta</button>
-						<button type="reset" class="btn">Cancelar</button>
+						<div class="btns">
+							<button type="button" class="btn" id="btn-create">Crear</button>
+							<button type="reset" class="btn">Cancelar</button>
+						</div>
 					</form>
 				</div>
-				<div class="info-div"></div>
 			</div>
+			<div class="info-div"></div>
 		</section>
 	</main>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

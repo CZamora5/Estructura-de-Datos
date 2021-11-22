@@ -3,6 +3,7 @@
   --clr-light-gray: rgb(201, 204, 213);
   --clr-light-pink: rgb(247, 204, 255);
   --clr-dark: rgb(10, 29, 55);
+  --fs-title: 2rem;
 }
 
 html {
@@ -11,6 +12,10 @@ html {
 
 * {
   box-sizing: inherit;
+}
+
+h1 {
+  font-size: var(--fs-title);
 }
 
 h1, h2 {
@@ -37,25 +42,26 @@ ul {
 
 header {
   background-color: var(--clr-light-pink);
-  color: var(--clr-light-beige);
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 .container {
-  /* width: 94%; */
+  width: 98%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 1rem;
-  /* flex-direction: column; */
 }
 
 section {
   background-color: var(--clr-light-gray);
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .section-header {
@@ -65,15 +71,42 @@ section {
 
 .section-content {
   padding: 1rem;
+  padding-bottom: 0;
 }
-
-/* .content section {
-  margin-top: 2rem;
-} */
 
 .btn {
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--clr-dark);
   border-radius: 0.25rem;
   cursor: pointer;
+  margin: 0.25rem 0;
+}
+
+.btn + .btn {
+  margin-left: 0.5rem;
+}
+
+.form-container {
+  width: fit-content;
+  margin: 0 auto;
+} 
+
+.change_route__options {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-div {
+  padding: 0 1rem 1rem 1rem;
+}
+
+@media  screen and (max-width: 586px) {
+  h1 {
+    --fs-title: 1.75rem;
+  }
 }
